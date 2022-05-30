@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express'; //import express
+import express, { NextFunction, Request, Response } from 'express'; //import express
 export const app = express(); //instantiate a new express app
 
 //middleware
@@ -11,10 +11,26 @@ app.use(express.json())
 import cors from 'cors';
 app.use(cors({ origin: true }));
 
+import { createStripeCheckoutSession } from "./checkout";
 
-app.post('/test',(req: Request, res: Response) => {
 
-    const amount = req.body.amount;
-    res.status(200).send({with_tax: amount  * 7});
+/** create api endpoint for checkout session */
 
-});
+app.post (
+    '/checkouts/', runAsync( async ({ body }: Request, res: Response) => {
+        res.send(
+            await createStripeCheckoutSession(body.line_items)
+        )
+    })
+)
+
+
+/** catch async errors when awaiting for promises */
+
+
+function runAsync(callback: Function) {
+    return ( req: Request, res: Response, next: NextFunction) => {
+        callback(req, res, next).catch(next);
+    }
+
+}

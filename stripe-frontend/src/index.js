@@ -8,10 +8,16 @@ import reportWebVitals from './reportWebVitals';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 
+export const stripePromise = loadStripe('pk_test_51L460EAlz4KiS5xuDPOxse9xyop6EijB1JlAN6UnxY6yklDPsh0VMiKgYMzHXHShOCjcp1rvPZuOEfC278PZKYah00aFZendsms'
+)
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
+  <Elements stripe={stripePromise}>
     <App />
+  </Elements>
+   
   </React.StrictMode>
 );
 
